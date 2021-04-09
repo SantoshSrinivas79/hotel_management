@@ -7,9 +7,6 @@ frappe.ui.form.on("Hotel Guests", {
   },
 
   validate: function(frm) {
-    if (frm.doc.cnic == undefined && frm.doc.passport_no == undefined) {
-      frappe.throw("Please enter CNIC or Passport Number");
-    }
 
     if (frm.doc.cnic && frm.doc.cnic.length != 15) {
       frm.doc.cnic = undefined;

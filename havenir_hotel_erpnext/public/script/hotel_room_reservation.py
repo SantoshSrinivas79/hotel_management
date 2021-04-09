@@ -113,7 +113,7 @@ def insert_room_scheduled(from_date, to_date):
 	room_list =[]
 	room =  frappe.db.sql("SELECT * FROM `tabRooms` INNER JOIN `tabRoom Type` on `tabRoom Type`.type = `tabRooms`.room_type ", as_dict=1)
 	for result in room:
-		room_check = frappe.db.sql("SELECT * FROM `tabRoom Scheduled` where date_scheduled BETWEEN %s and %s AND room = %s",(from_date, to_date, result.room_number), as_dict=1)
+		room_check = frappe.db.sql("SELECT * FROM `tabRoom Scheduled` where date_scheduled BETWEEN %s and %s AND room = %s AND  status ='Booked' ",(from_date, to_date, result.room_number), as_dict=1)
 		print(room_check)
 		if room_check ==[]:
 			room_list.append(eval(str({"room_number": result.room_number, "room_name": result.room_name, "capacity": result.capacity, "extra_beds":result.extra_beds})))
@@ -131,4 +131,5 @@ def on_submit(self, method):
 				"room":d.room,
 				"date_scheduled":day,
 				"status":self.status,
+				"parent":self.name
 			}).save()

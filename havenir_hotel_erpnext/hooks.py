@@ -20,6 +20,9 @@ fixtures = [{
       'name', 'in', [
         'Sales Invoice-check_in_id',
         'Sales Invoice-check_in_date',
+        'Hotel Room Reservation-selected_room',
+        'Hotel Room Reservation-show_available_room'
+
       ]
     ]
   ]
