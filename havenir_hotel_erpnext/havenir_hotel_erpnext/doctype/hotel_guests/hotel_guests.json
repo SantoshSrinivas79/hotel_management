@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "naming_series:",
  "creation": "2020-01-29 14:39:12.726257",
  "doctype": "DocType",
@@ -15,6 +16,10 @@
   "id_card_front_attachment",
   "id_card_front_photo",
   "contact_no",
+  "gender",
+  "designation",
+  "company",
+  "email",
   "column_break_8",
   "id_card_back_attachment",
   "id_card_back_photo",
@@ -26,14 +31,13 @@
  "fields": [
   {
    "allow_in_quick_entry": 1,
-   "description": "Format: XXXXX-XXXXXXX-X\nExample: 12345-1234567-1",
+   "description": "Example: 123456789 or 1123456789123",
    "fieldname": "cnic",
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "CNIC",
-   "reqd": 1,
    "unique": 1
   },
   {
@@ -135,9 +139,31 @@
    "fieldname": "details_section",
    "fieldtype": "Section Break",
    "label": "Details"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Link",
+   "label": "Gender",
+   "options": "Gender"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "Company"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
   }
  ],
- "modified": "2020-07-29 12:02:04.025076",
+ "links": [],
+ "modified": "2021-04-10 00:30:58.102258",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Guests",

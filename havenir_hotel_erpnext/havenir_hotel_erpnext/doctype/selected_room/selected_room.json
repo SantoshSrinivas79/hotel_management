@@ -8,7 +8,11 @@
   "room",
   "room_name",
   "capacity",
-  "extra_beds"
+  "room_type",
+  "extra_beds",
+  "male",
+  "female",
+  "children"
  ],
  "fields": [
   {
@@ -35,12 +39,33 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Extra Beds"
+  },
+  {
+   "fieldname": "male",
+   "fieldtype": "Int",
+   "label": "Male"
+  },
+  {
+   "fieldname": "female",
+   "fieldtype": "Int",
+   "label": "Female"
+  },
+  {
+   "fieldname": "children",
+   "fieldtype": "Int",
+   "label": "Children"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Room Type"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-04-09 13:21:35.004249",
+ "modified": "2021-04-09 20:52:31.778076",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Selected Room",

@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "field:room_number",
  "creation": "2020-01-29 12:55:46.208299",
  "doctype": "DocType",
@@ -11,8 +12,10 @@
   "column_break_4",
   "room_type",
   "check_in_id",
-  "guest_name",
   "column_break_8",
+  "guest_name",
+  "section_break_9",
+  "item",
   "price",
   "section_break_6",
   "facilities"
@@ -89,10 +92,21 @@
    "precision": "2",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Table",
+   "label": "Item",
+   "options": "Room Item"
   }
  ],
  "icon": "calender",
- "modified": "2020-02-01 22:37:18.933762",
+ "links": [],
+ "modified": "2021-04-09 22:37:22.568037",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Rooms",

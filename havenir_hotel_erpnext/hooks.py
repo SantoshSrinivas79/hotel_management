@@ -21,12 +21,21 @@ fixtures = [{
         'Sales Invoice-check_in_id',
         'Sales Invoice-check_in_date',
         'Hotel Room Reservation-selected_room',
-        'Hotel Room Reservation-show_available_room'
-
+        'Hotel Room Reservation-show_available_room',
+        'Hotel Room Reservation-change_status',
+        'Hotel Room Reservation-get_items',
+        'Hotel Room Reservation Item-item-read_only',
       ]
     ]
   ]
-}]
+},{
+    "doctype": "Property Setter",
+    "filters": [["name", "in", [
+       'Hotel Room Reservation Item-item-read_only'
+    ]]]
+},
+
+]
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/havenir_hotel_erpnext/css/havenir_hotel_erpnext.css"
@@ -104,8 +113,11 @@ doctype_js = {
 # }
 doc_events = {
 	"Hotel Room Reservation": {
-		"on_submit": "havenir_hotel_erpnext.public.script.hotel_room_reservation.on_submit"
-	}
+		"on_submit": "havenir_hotel_erpnext.public.script.hotel_room_reservation.on_submit",
+	},
+  "Checkin Automation":{
+    "on_submit":"havenir_hotel_erpnext.havenir_hotel_erpnext.doctype.checkin_automation.checkin_automation.on_submit"
+  }
 }
 
 # Scheduled Tasks

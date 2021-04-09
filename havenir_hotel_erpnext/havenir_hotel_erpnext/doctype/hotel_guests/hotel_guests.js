@@ -8,21 +8,14 @@ frappe.ui.form.on("Hotel Guests", {
 
   validate: function(frm) {
 
-    if (frm.doc.cnic && frm.doc.cnic.length != 15) {
-      frm.doc.cnic = undefined;
-      frm.refresh_field("cnic");
-      frappe.msgprint("Please enter CNIC in the correct format");
-    } else {
-      if (frm.doc.cnic[5] != "-") {
-        frm.doc.cnic = undefined;
-        frm.refresh_field("cnic");
-        frappe.msgprint("Please enter CNIC in the correct format");
-      }
-      if (frm.doc.cnic[13] != "-") {
-        frm.doc.cnic = undefined;
-        frm.refresh_field("cnic");
-        frappe.msgprint("Please enter CNIC in the correct format");
-      }
+    if (frm.doc.cnic && frm.doc.cnic.length ==9) {
+      // frm.doc.cnic = undefined;
+      // frm.refresh_field("cnic");
+      // frappe.msgprint("Please enter CNIC in the correct format");
+      var cnic = cur_frm.doc.cnic;
+      cur_frm.set_value("cnic",cnic+"X");
+    }else if(frm.doc.cnic && frm.doc.cnic.length > 12){
+      frappe.throw("CNIC fields limited to 12 max number")
     }
     // if (frm.doc.contact_no && frm.doc.contact_no.length != 12) {
     //   frm.doc.contact_no = undefined;

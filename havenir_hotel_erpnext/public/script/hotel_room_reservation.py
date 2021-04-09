@@ -116,7 +116,7 @@ def insert_room_scheduled(from_date, to_date):
 		room_check = frappe.db.sql("SELECT * FROM `tabRoom Scheduled` where date_scheduled BETWEEN %s and %s AND room = %s AND  status ='Booked' ",(from_date, to_date, result.room_number), as_dict=1)
 		print(room_check)
 		if room_check ==[]:
-			room_list.append(eval(str({"room_number": result.room_number, "room_name": result.room_name, "capacity": result.capacity, "extra_beds":result.extra_beds})))
+			room_list.append(eval(str({"room_number": result.room_number, "room_name": result.room_name, "capacity": result.capacity, "extra_beds":result.extra_beds, "room_type": result.type})))
 	return room_list
 
 
@@ -133,3 +133,15 @@ def on_submit(self, method):
 				"status":self.status,
 				"parent":self.name
 			}).save()
+
+@frappe.whitelist()
+def  update_status_cancelled(status, parent):
+	if status == "Cancelled":
+		frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Cancelled' WHERE parent = %s", (parent))
+		frappe.db.sql("UPDATE `tabHotel Room Reservation` set status =%s where name=%s", (status,parent))
+	else:
+		frappe.db.sql("UPDATE `tabHotel Room Reservation` set status =%s where name=%s", (status,parent))
+
+@frappe.whitelist()
+def get_item_per_room(parent):
+	return frappe.db.sql("SELECT item FROM `tabRoom Item` where parent =%s",parent, as_dict=1)

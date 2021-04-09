@@ -141,6 +141,7 @@ frappe.ui.form.on("Hotel Check Out", {
         .call("get_check_in_details")
         .then(r => {
           var data = r.message;
+          console.log(data)
           frm.doc.check_in_id = data[0];
           frm.doc.cnic = data[1];
           frm.doc.guest_name = data[2];
