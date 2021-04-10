@@ -1,4 +1,5 @@
 cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
+    
     if(cur_frm.doc.from_date > cur_frm.doc.to_date){
         cur_frm.clear_table('items');
         cur_frm.refresh();
@@ -16,13 +17,19 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
         <th scope="col">Capacity</th>
         <th scope="col">Extra Bed</th>
         <th scope="col">Type</th>
+        <th schope="col"> Package </th>
     </tr>
     </thead>
     <tbody class="row_data">
     </tbody>
 </table>
     <script>
-    function add_to_room(room_number,room_name,capacity,extra_beds, room_type){
+    function add_to_room(room_number,room_name,capacity,extra_beds, room_type, package){
+            if($('#'+package).val() == "")
+            {
+                frappe.throw("Please Select Package");
+            }
+            console.log(package);
             console.log(room_number);
             console.log(room_name);
             console.log(capacity);
@@ -34,7 +41,10 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
             new_row.capacity = capacity;
             new_row.extra_beds = extra_beds;
             new_row.room_type = room_type;
+            var new_row = cur_frm.add_child("items");
+            new_row.item =$('#'+package).val()
             cur_frm.refresh();
+            cur_frm.trigger("recalculate_rates");
             
 
         }
@@ -50,6 +60,7 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
         ],
         primary_action_label: __('Refresh'),
         primary_action: function(frm) {
+            cur_frm.clear_table("items");
             frappe.call({
                 method:"havenir_hotel_erpnext.public.script.hotel_room_reservation.insert_room_scheduled",
                 args:{from_date:cur_frm.doc.from_date, to_date:cur_frm.doc.to_date},
@@ -57,7 +68,8 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
                     var name = r.message;
                     me.dialog.set_value("campaign_list",table);
                     $('.row_data').empty();
-                    console.log(r.message)
+                    console.log(r.message)     
+                    
                     for(var i=0; i<name.length; i++){
                         $('.row_data').append(`
                                 <tr >
@@ -66,15 +78,28 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
                                 <td>`+name[i].capacity+`</td>
                                 <td>`+name[i].extra_beds+`</td>
                                 <td>`+name[i].room_type+`</td>
-                                <td><a onclick="add_to_room('`+name[i].room_number+`','`+name[i].room_name+`','`+name[i].capacity+`','`+name[i].extra_beds+`','`+name[i].room_type+`')"> Add to Room</a></td>
+                                <td id="select"> 
+                                    <select id ='package`+i+`' class='input-with-feedback form-control bold'>
+                                    </select>
+                                </td>
+                                <td><a onclick="add_to_room('`+name[i].room_number+`','`+name[i].room_name+`','`+name[i].capacity+`','`+name[i].extra_beds+`','`+name[i].room_type+`','`+'package'+i+`')"> Add to Room</a></td>
                             </tr>
                         `);
-                        
+                        $('#package'+i).append("<option></option>");
+                        for(var s=0; s< name[i].package.length; s++)
+                        { 
+                            console.log(name[i].package[s].item);
+                            if(name[i].package[s].item != undefined)
+                            {
+                                $('#package'+i).append("<option>"+name[i].package[s].item+"</option>");
+                            }
+                        }
                     }
                 }
             })
         }
     });
+    $(".row_data").remove();
     me.dialog.show();
     me.dialog.$wrapper.find('.modal-dialog').css("width", "900px");
 }
@@ -124,23 +149,6 @@ frappe.ui.form.on('Hotel Room Reservation', {
 })
 
 cur_frm.cscript.get_items = function(frm){
-    cur_frm.clear_table("items");
-    var rooms = cur_frm.doc.selected_room;
-    for(var i=0; i<rooms.length; i++){
-        console.log(rooms[i].room)
-        frappe.call({
-            method:"havenir_hotel_erpnext.public.script.hotel_room_reservation.get_item_per_room",
-            args:{parent:rooms[i].room}
-        }).done((r) =>{
-            for(var e=0; e < r.message.length; e++)
-            {
-                console.log(r.message)
-                var new_row = cur_frm.add_child("items");
-                new_row.item =r.message[e].item;
-                cur_frm.refresh();
-            }
-        })
-    }
     cur_frm.trigger("recalculate_rates");
 }
 
