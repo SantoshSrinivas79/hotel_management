@@ -25,6 +25,7 @@ def on_submit(self, method):
 			"cnic":guest.cnic,
 			"contact_no":guest.contact_no,
 			"guest_name":guest.guest_name,
+			"reservation_id": self.select_hotel_room_reservation,
 			"rooms":[{
 				"room_no":d.room,
 				"room_type":d.room_type,

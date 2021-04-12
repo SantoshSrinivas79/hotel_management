@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "naming_series:",
  "creation": "2020-01-29 14:57:03.679302",
  "doctype": "DocType",
@@ -10,6 +11,7 @@
   "title",
   "naming_series",
   "guest_id",
+  "reservation_id",
   "guest_photo_attachment",
   "check_in",
   "company",
@@ -185,10 +187,17 @@
    "print_hide": 1,
    "remember_last_selected_value": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "reservation_id",
+   "fieldtype": "Link",
+   "label": "Reservation ID",
+   "options": "Hotel Room Reservation"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-05-03 13:52:44.433659",
+ "links": [],
+ "modified": "2021-04-12 15:36:31.099382",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Check In",

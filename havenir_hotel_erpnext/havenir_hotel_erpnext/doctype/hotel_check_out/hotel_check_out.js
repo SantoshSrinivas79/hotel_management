@@ -13,6 +13,44 @@ frappe.ui.form.on("Hotel Check Out", {
     });
   },
 
+  refresh: function(frm){
+    if(frm.doc.docstatus == 1){
+      frm.add_custom_button(__('Create Invoice'), ()=> {
+        frappe.model.with_doc("Hotel Settings", "Hotel Settings", ()=>{
+          frappe.model.with_doctype("Sales Invoice", ()=>{
+            let hotel_settings = frappe.get_doc("Hotel Settings", "Hotel Settings");
+            let invoice = frappe.model.get_new_doc("Sales Invoice");
+            invoice.customer = frm.doc.customer || hotel_settings.default_customer;
+            if (hotel_settings.default_invoice_naming_series){
+              invoice.naming_series = hotel_settings.default_invoice_naming_series;
+            }
+            for (let d of frm.doc.items){
+              frappe.call({
+                "method":"havenir_hotel_erpnext.havenir_hotel_erpnext.doctype.hotel_check_out.hotel_check_out.get_item_name",
+                "args":{"name":d.item}
+              }).done((r) =>{
+                console.log(r.message)
+                var item_name = r.message.item_name;
+                let invoice_item = frappe.model.add_child(invoice, "items");
+                invoice_item.item_code = d.item;
+                invoice_item.qty = d.qty;
+                invoice_item.rate = d.rate;
+                invoice_item.description = item_name;
+                invoice_item.uom ="Unit";
+                invoice_item.item_name = item_name;
+              });
+             
+            }
+            if (hotel_settings.default_taxes_and_charges){
+              invoice.taxes_and_charges = hotel_settings.default_taxes_and_charges;
+            }
+            frappe.set_route("Form", invoice.doctype, invoice.name);
+          });
+        });
+      });
+    }
+  },
+
   validate: function(frm){
     if ((frm.doc.net_total_amount - frm.doc.total_payments - frm.doc.amount_paid - frm.doc.discount - frm.food_discount) > 0 && frm.doc.customer == 'Hotel Walk In Customer'){
       frappe.throw('Amount paid must be equal or greater than net balance amount.')
@@ -148,6 +186,7 @@ frappe.ui.form.on("Hotel Check Out", {
           frm.doc.check_in = data[3];
           frm.doc.contact_no = data[4];
           frm.doc.guest_id = data[5];
+          frm.doc.reservation_id = data[6];
           frm.refresh_field("check_in_id");
           frm.refresh_field("cnic");
           frm.refresh_field("guest_name");
@@ -161,15 +200,16 @@ frappe.ui.form.on("Hotel Check Out", {
           frm.call("get_items").then(r => {
             if (r.message) {
               var data = r.message;
+              console.log(data)
               if (data[0] == 0) {
                 data[0] = 1;
               }
               frm.doc.items = undefined;
               frm.add_child("items", {
-                item: data[1].room,
-                qty: data[0],
+                item: data[1].item,
+                qty: data[1].qty,
                 rate: data[1].price,
-                amount: data[0] * data[1].price,
+                amount: data[1].qty * data[1].price,
                 date: frm.doc.check_in,
                 document_type: "Hotel Check In",
                 document_id: frm.doc.check_in_id

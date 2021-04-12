@@ -74,7 +74,7 @@ class HotelRoomReservation(Document):
 					net_rate += day_rate[0][0]
 				else:
 					frappe.throw(
-						_("Please Select Hotel Room Rate on {} for Item ID: "+d.item).format(
+						_("Item/Package "+d.item+" should have a Pricing rule From date {}, Please set here <a href='desk#List/Hotel Room Pricing/List' target='_blank'>Hotel Room Pricing</a>").format(
 							frappe.format(day, dict(fieldtype="Date"))), exc=HotelRoomPricingNotSetError)
 			d.rate = net_rate
 			d.amount = net_rate * flt(d.qty)

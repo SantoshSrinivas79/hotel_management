@@ -78,14 +78,11 @@ class HotelCheckOut(Document):
 
         # Creating Sales Invoice
         create_sales_invoice(self, all_checked_out)
-        
-        
-        
 
     def get_check_in_details(self):
         room_doc = frappe.get_doc('Rooms', self.room)
         check_in_doc = frappe.get_doc('Hotel Check In', room_doc.check_in_id)
-        return [check_in_doc.name, check_in_doc.cnic, check_in_doc.guest_name, check_in_doc.check_in, check_in_doc.contact_no, check_in_doc.guest_id]
+        return [check_in_doc.name, check_in_doc.cnic, check_in_doc.guest_name, check_in_doc.check_in, check_in_doc.contact_no, check_in_doc.guest_id, check_in_doc.reservation_id]
 
     def calculate_stay_days(self):
         if frappe.utils.data.date_diff(self.check_out, self.check_in) == 0:
@@ -95,12 +92,13 @@ class HotelCheckOut(Document):
 
     def get_items(self):
         # Getting Hotel Check In Details
-        hotel_check_in = frappe.get_doc('Hotel Check In', self.check_in_id)
+        hotel_check_in = frappe.db.sql("SELECT * FROM `tabHotel Room Reservation Item` where parent=%s", self.reservation_id, as_dict=1)
         check_in_dict = {}
-        for room in hotel_check_in.rooms:
-            if room.room_no == self.room:
-                check_in_dict['room'] = room.room_no
-                check_in_dict['price'] = room.price
+        for room in hotel_check_in:
+                check_in_dict['item'] = room.item
+                check_in_dict['price'] = room.rate
+                check_in_dict['qty'] = room.qty
+
 
         # Geting Hotel Food Order Details
         total_food_discount = 0
@@ -390,3 +388,7 @@ def create_sales_invoice(self, all_checked_out):
                     sales_invoice_doc.discount_amount += self.food_discount
             sales_invoice_doc.insert(ignore_permissions=True)
             sales_invoice_doc.submit()
+
+@frappe.whitelist()
+def get_item_name(name):
+    return frappe.get_doc("Item",name)

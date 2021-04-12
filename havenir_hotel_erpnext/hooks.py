@@ -24,6 +24,7 @@ fixtures = [{
         'Hotel Room Reservation-show_available_room',
         'Hotel Room Reservation-change_status',
         'Hotel Room Reservation Item-item-read_only',
+        'Hotel Room Reservation Item-room',
       ]
     ]
   ]
