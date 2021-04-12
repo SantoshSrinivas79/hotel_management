@@ -126,11 +126,11 @@ cur_frm.cscript.change_status = function(doc, cdt, cdn){
     });
     me.dialog.show()
 }
-var date_diff_indays = function(date1, date2) {
-    var dt1 = new Date(date1);
-    var dt2 = new Date(date2);
-    return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
-}
+// var date_diff_indays = function(date1, date2) {
+//     var dt1 = new Date(date1);
+//     var dt2 = new Date(date2);
+//     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+// }
 
 frappe.ui.form.on('Hotel Room Reservation', {
 	recalculate_rates: function(frm) {     
@@ -138,13 +138,13 @@ frappe.ui.form.on('Hotel Room Reservation', {
 			|| !frm.doc.items.length){
 			return;
         }
-        var qty = date_diff_indays(cur_frm.doc.from_date, cur_frm.doc.to_date);
+        // var qty = date_diff_indays(cur_frm.doc.from_date, cur_frm.doc.to_date);
 		frappe.call({
 			"method": "erpnext.hotels.doctype.hotel_room_reservation.hotel_room_reservation.get_room_rate",
 			"args": {"hotel_room_reservation": frm.doc}
 		}).done((r)=> {
 			for (var i = 0; i < r.message.items.length; i++) {
-                frm.doc.items[i].qty = qty;
+                frm.doc.items[i].qty = 1;
                 frm.doc.items[i].rate = r.message.items[i].rate;
 				frm.doc.items[i].amount = r.message.items[i].amount;
 			}

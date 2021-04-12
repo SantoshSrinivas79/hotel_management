@@ -92,7 +92,7 @@ class HotelCheckOut(Document):
 
     def get_items(self):
         # Getting Hotel Check In Details
-        hotel_check_in = frappe.db.sql("SELECT * FROM `tabHotel Room Reservation Item` where parent=%s", self.reservation_id, as_dict=1)
+        hotel_check_in = frappe.db.sql("SELECT * FROM `tabHotel Room Reservation Item` where parent=%s and room =%s", (self.reservation_id, self.room), as_dict=1)
         check_in_dict = {}
         for room in hotel_check_in:
                 check_in_dict['item'] = room.item
