@@ -26,13 +26,20 @@ fixtures = [{
         'Hotel Room Reservation Item-item-read_only',
         'Hotel Room Reservation Item-room',
         'Hotel Room Reservation-company',
+        'Hotel Room Reservation-total_room',
+        'Hotel Room Reservation-section_break_16',
+        'Hotel Room Reservation-total_extra_beds',
+        'Hotel Room Reservation-column_break_14',
+        'Hotel Room Reservation-total_capacity',
+        ''
       ]
     ]
   ]
 },{
     "doctype": "Property Setter",
     "filters": [["name", "in", [
-       'Hotel Room Reservation Item-item-read_only'
+       'Hotel Room Reservation Item-item-read_only',
+       'Hotel Room Reservation-main-search_fields'
     ]]]
 },
 

@@ -388,8 +388,9 @@ def create_sales_invoice(self, all_checked_out):
                     sales_invoice_doc.discount_amount += check_out_doc.discount
                 if self.food_discount != 0 and exclude_discount == 0:
                     sales_invoice_doc.discount_amount += self.food_discount
-            sales_invoice_doc.insert(ignore_permissions=True)
-            sales_invoice_doc.submit()
+            sales_invoice_doc.save(ignore_permissions=True)
+            sales_invoice_doc.save()
+            frappe.msgprint("Created Invoice # <a href='/desk#Form/Sales Invoice/"+sales_invoice_doc.name +"'>"+ sales_invoice_doc.name+"</a>")
 
 @frappe.whitelist()
 def get_item_name(name):
