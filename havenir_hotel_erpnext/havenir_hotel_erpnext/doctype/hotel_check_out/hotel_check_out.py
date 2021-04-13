@@ -60,8 +60,8 @@ class HotelCheckOut(Document):
             payment_doc.check_in_id = self.check_in_id
             payment_doc.guest_name = self.guest_name
             payment_doc.contact_no = self.contact_no
-            payment_doc.save()
-            payment_doc.submit()
+            # payment_doc.save()
+            # payment_doc.submit()
         
         if self.amount_paid == 0 and self.refund > 0:
             hotel_refund_entry = frappe.new_doc('Hotel Payment Entry')
@@ -73,8 +73,8 @@ class HotelCheckOut(Document):
             hotel_refund_entry.guest_id = self.guest_id
             hotel_refund_entry.check_in_id = self.check_in_id
             hotel_refund_entry.guest_name = self.guest_name
-            hotel_refund_entry.save()
-            hotel_refund_entry.submit()
+            # hotel_refund_entry.save()
+            # hotel_refund_entry.submit()
 
 
 
@@ -180,217 +180,261 @@ class HotelCheckOut(Document):
 
 
 def create_sales_invoice(self, all_checked_out):
+    sales_invoice_doc = frappe.new_doc('Sales Invoice')
+    company = frappe.get_doc('Company', self.company)
+    sales_invoice_doc.customer = self.customer
+    sales_invoice_doc.check_in_id = self.check_in_id
+    sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
+    sales_invoice_doc.due_date = frappe.utils.data.today()
+    sales_invoice_doc.debit_to = company.default_receivable_account
+    sales_invoice_doc.check_out_date = self.posting_date
+    sales_invoice_doc.reservation_id = self.reservation_id
+    sales_invoice_doc.guest_id = self.guest_id
+    sales_invoice_doc.guest_name = self.guest_name
+    sales_invoice_doc.contact_no =self.contact_no
+    
+    for item in self.items:
+        item_doc = frappe.get_doc('Item', item.item)
+
+        # Getting Item default Income Account
+        default_income_account = None
+        for item_default in item_doc.item_defaults:
+            if item_default.company == self.company:
+                if item_default.income_account:
+                    default_income_account = item_default.income_account
+                else:
+                    default_income_account = company.default_income_account
+
+        # Adding Items to Sales Invoice
+        sales_invoice_doc.append('items',{
+            'item_code': item_doc.item_code,
+            'item_name': item_doc.item_name,
+            'description': item_doc.description,
+            'qty': item.qty,
+            'uom': item_doc.stock_uom,
+            'rate': item.rate,
+            'amount': item.amount,
+            'income_account': default_income_account
+        })
+        sales_invoice_doc.save(ignore_permissions=True)
+    frappe.msgprint("Created Invoice # <a href='/desk#Form/Sales Invoice/"+sales_invoice_doc.name +"'>"+ sales_invoice_doc.name+"</a>")
+
     # Sales Invoice for Hotel Walk In Customer
-    if self.customer == 'Hotel Walk In Customer':
-        # Creating Sales Invoice
-        sales_invoice_doc = frappe.new_doc('Sales Invoice')
-        company = frappe.get_doc('Company', self.company)
-        sales_invoice_doc.discount_amount = 0
+    # if self.customer == 'Hotel Walk In Customer':
+    #     # Creating Sales Invoice
+    #     sales_invoice_doc = frappe.new_doc('Sales Invoice')
+    #     company = frappe.get_doc('Company', self.company)
+    #     sales_invoice_doc.discount_amount = 0
 
-        sales_invoice_doc.customer = self.customer
-        sales_invoice_doc.check_in_id = self.check_in_id
-        sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
-        sales_invoice_doc.due_date = frappe.utils.data.today()
-        sales_invoice_doc.debit_to = company.default_receivable_account
+    #     sales_invoice_doc.customer = self.customer
+    #     sales_invoice_doc.check_in_id = self.check_in_id
+    #     sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
+    #     sales_invoice_doc.due_date = frappe.utils.data.today()
+    #     sales_invoice_doc.debit_to = company.default_receivable_account
+    #     sales_invoice_doc.check_out_date = self.posting_date
+    #     sales_invoice_doc.reservation_id = self.reservation_id
+    #     sales_invoice_doc.guest_id = self.guest_id
+    #     sales_invoice_doc.guest_name = self.guest_name
+    #     sales_invoice_doc.contact_no =self.contact_no
 
-        # Looping through the check out items
-        for item in self.items:
-            item_doc = frappe.get_doc('Item', item.item)
+    #     # Looping through the check out items
+    #     for item in self.items:
+    #         item_doc = frappe.get_doc('Item', item.item)
 
-            # Getting Item default Income Account
-            default_income_account = None
-            for item_default in item_doc.item_defaults:
-                if item_default.company == self.company:
-                    if item_default.income_account:
-                        default_income_account = item_default.income_account
-                    else:
-                        default_income_account = company.default_income_account
+    #         # Getting Item default Income Account
+    #         default_income_account = None
+    #         for item_default in item_doc.item_defaults:
+    #             if item_default.company == self.company:
+    #                 if item_default.income_account:
+    #                     default_income_account = item_default.income_account
+    #                 else:
+    #                     default_income_account = company.default_income_account
 
-            # Adding Items to Sales Invoice
-            sales_invoice_doc.append('items',{
-                'item_code': item_doc.item_code,
-                'item_name': item_doc.item_name,
-                'description': item_doc.description,
-                'qty': item.qty,
-                'uom': item_doc.stock_uom,
-                'rate': item.rate,
-                'amount': item.amount,
-                'income_account': default_income_account
-            })
-        if self.discount != 0:
-            sales_invoice_doc.discount_amount += self.discount
-        if self.food_discount != 0:
-            sales_invoice_doc.discount_amount += self.food_discount
-        if self.service_charges != 0:
-            item_doc = frappe.get_doc('Item', 'SERVICE CHARGES')
+    #         # Adding Items to Sales Invoice
+    #         sales_invoice_doc.append('items',{
+    #             'item_code': item_doc.item_code,
+    #             'item_name': item_doc.item_name,
+    #             'description': item_doc.description,
+    #             'qty': item.qty,
+    #             'uom': item_doc.stock_uom,
+    #             'rate': item.rate,
+    #             'amount': item.amount,
+    #             'income_account': default_income_account
+    #         })
+    #     if self.discount != 0:
+    #         sales_invoice_doc.discount_amount += self.discount
+    #     if self.food_discount != 0:
+    #         sales_invoice_doc.discount_amount += self.food_discount
+    #     if self.service_charges != 0:
+    #         item_doc = frappe.get_doc('Item', 'SERVICE CHARGES')
 
-            # Getting Item default Income Account
-            default_income_account = None
-            for item_default in item_doc.item_defaults:
-                if item_default.company == self.company:
-                    if item_default.income_account:
-                        default_income_account = item_default.income_account
-                    else:
-                        default_income_account = company.default_income_account
+    #         # Getting Item default Income Account
+    #         default_income_account = None
+    #         for item_default in item_doc.item_defaults:
+    #             if item_default.company == self.company:
+    #                 if item_default.income_account:
+    #                     default_income_account = item_default.income_account
+    #                 else:
+    #                     default_income_account = company.default_income_account
 
-            # Adding Items to Sales Invoice
-            sales_invoice_doc.append('items',{
-                'item_code': item_doc.item_code,
-                'item_name': item_doc.item_name,
-                'description': item_doc.description,
-                'qty': 1,
-                'uom': item_doc.stock_uom,
-                'rate': self.service_charges,
-                'amount': self.service_charges,
-                'income_account': default_income_account
-            })
-        sales_invoice_doc.insert(ignore_permissions=True)
-        sales_invoice_doc.submit()
-    if all_checked_out == 1 or self.customer != 'Hotel Walk In Customer': 
-        create_walk_in_invoice = 0
-        for item in self.items:
-            if item.is_pos == 1:
-                create_walk_in_invoice = 1
-        if create_walk_in_invoice == 1:
-            # Creating Sales Invoice
-            sales_invoice_doc = frappe.new_doc('Sales Invoice')
-            company = frappe.get_doc('Company', self.company)
-            sales_invoice_doc.discount_amount = 0
+    #         # Adding Items to Sales Invoice
+    #         sales_invoice_doc.append('items',{
+    #             'item_code': item_doc.item_code,
+    #             'item_name': item_doc.item_name,
+    #             'description': item_doc.description,
+    #             'qty': 1,
+    #             'uom': item_doc.stock_uom,
+    #             'rate': self.service_charges,
+    #             'amount': self.service_charges,
+    #             'income_account': default_income_account
+    #         })
+    #     sales_invoice_doc.insert(ignore_permissions=True)
+    #     sales_invoice_doc.submit()
+    # if all_checked_out == 1 or self.customer != 'Hotel Walk In Customer': 
+    #     create_walk_in_invoice = 0
+    #     for item in self.items:
+    #         if item.is_pos == 1:
+    #             create_walk_in_invoice = 1
+    #     if create_walk_in_invoice == 1:
+    #         # Creating Sales Invoice
+    #         sales_invoice_doc = frappe.new_doc('Sales Invoice')
+    #         company = frappe.get_doc('Company', self.company)
+    #         sales_invoice_doc.discount_amount = 0
 
-            sales_invoice_doc.customer = 'Hotel Walk In Customer'
-            sales_invoice_doc.check_in_id = self.check_in_id
-            sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
-            sales_invoice_doc.due_date = frappe.utils.data.today()
-            sales_invoice_doc.debit_to = company.default_receivable_account
+    #         sales_invoice_doc.customer = 'Hotel Walk In Customer'
+    #         sales_invoice_doc.check_in_id = self.check_in_id
+    #         sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
+    #         sales_invoice_doc.due_date = frappe.utils.data.today()
+    #         sales_invoice_doc.debit_to = company.default_receivable_account
 
-            # Looping through the check out items
-            for item in self.items:
-                if item.is_pos == 1:
-                    item_doc = frappe.get_doc('Item', item.item)
+    #         # Looping through the check out items
+    #         for item in self.items:
+    #             if item.is_pos == 1:
+    #                 item_doc = frappe.get_doc('Item', item.item)
 
-                    # Getting Item default Income Account
-                    default_income_account = None
-                    for item_default in item_doc.item_defaults:
-                        if item_default.company == self.company:
-                            if item_default.income_account:
-                                default_income_account = item_default.income_account
-                            else:
-                                default_income_account = company.default_income_account
+    #                 # Getting Item default Income Account
+    #                 default_income_account = None
+    #                 for item_default in item_doc.item_defaults:
+    #                     if item_default.company == self.company:
+    #                         if item_default.income_account:
+    #                             default_income_account = item_default.income_account
+    #                         else:
+    #                             default_income_account = company.default_income_account
 
-                    # Adding Items to Sales Invoice
-                    sales_invoice_doc.append('items',{
-                        'item_code': item_doc.item_code,
-                        'item_name': item_doc.item_name,
-                        'description': item_doc.description,
-                        'qty': item.qty,
-                        'uom': item_doc.stock_uom,
-                        'rate': item.rate,
-                        'amount': item.amount,
-                        'income_account': default_income_account
-                    })
-            if self.discount:
-                sales_invoice_doc.discount_amount = self.discount
-            if self.food_discount != 0:
-                sales_invoice_doc.discount_amount += self.food_discount
+    #                 # Adding Items to Sales Invoice
+    #                 sales_invoice_doc.append('items',{
+    #                     'item_code': item_doc.item_code,
+    #                     'item_name': item_doc.item_name,
+    #                     'description': item_doc.description,
+    #                     'qty': item.qty,
+    #                     'uom': item_doc.stock_uom,
+    #                     'rate': item.rate,
+    #                     'amount': item.amount,
+    #                     'income_account': default_income_account
+    #                 })
+    #         if self.discount:
+    #             sales_invoice_doc.discount_amount = self.discount
+    #         if self.food_discount != 0:
+    #             sales_invoice_doc.discount_amount += self.food_discount
 
-            if self.service_charges != 0:
-                item_doc = frappe.get_doc('Item', 'SERVICE CHARGES')
+    #         if self.service_charges != 0:
+    #             item_doc = frappe.get_doc('Item', 'SERVICE CHARGES')
 
-                # Getting Item default Income Account
-                default_income_account = None
-                for item_default in item_doc.item_defaults:
-                    if item_default.company == self.company:
-                        if item_default.income_account:
-                            default_income_account = item_default.income_account
-                        else:
-                            default_income_account = company.default_income_account
+    #             # Getting Item default Income Account
+    #             default_income_account = None
+    #             for item_default in item_doc.item_defaults:
+    #                 if item_default.company == self.company:
+    #                     if item_default.income_account:
+    #                         default_income_account = item_default.income_account
+    #                     else:
+    #                         default_income_account = company.default_income_account
 
-                # Adding Items to Sales Invoice
-                sales_invoice_doc.append('items',{
-                    'item_code': item_doc.item_code,
-                    'item_name': item_doc.item_name,
-                    'description': item_doc.description,
-                    'qty': 1,
-                    'uom': item_doc.stock_uom,
-                    'rate': self.service_charges,
-                    'amount': self.service_charges,
-                    'income_account': default_income_account
-                })
+    #             # Adding Items to Sales Invoice
+    #             sales_invoice_doc.append('items',{
+    #                 'item_code': item_doc.item_code,
+    #                 'item_name': item_doc.item_name,
+    #                 'description': item_doc.description,
+    #                 'qty': 1,
+    #                 'uom': item_doc.stock_uom,
+    #                 'rate': self.service_charges,
+    #                 'amount': self.service_charges,
+    #                 'income_account': default_income_account
+    #             })
 
-            sales_invoice_doc.insert(ignore_permissions=True)
-            sales_invoice_doc.submit()
+    #         sales_invoice_doc.insert(ignore_permissions=True)
+    #         sales_invoice_doc.submit()
 
-            # Creating Additional Payment Vouchers
-            if self.total_pos_charges - self.total_payments > 0:
-                payment_doc = frappe.new_doc('Hotel Payment Entry')
-                payment_doc.room = self.room
-                payment_doc.amount_paid = self.total_pos_charges - self.total_payments - self.discount
-                payment_doc.guest_id = self.guest_id
-                payment_doc.check_in_id = self.check_in_id
-                payment_doc.guest_name = self.guest_name
-                payment_doc.contact_no = self.contact_no
-                payment_doc.save()
-                payment_doc.submit()
+    #         # Creating Additional Payment Vouchers
+    #         if self.total_pos_charges - self.total_payments > 0:
+    #             payment_doc = frappe.new_doc('Hotel Payment Entry')
+    #             payment_doc.room = self.room
+    #             payment_doc.amount_paid = self.total_pos_charges - self.total_payments - self.discount
+    #             payment_doc.guest_id = self.guest_id
+    #             payment_doc.check_in_id = self.check_in_id
+    #             payment_doc.guest_name = self.guest_name
+    #             payment_doc.contact_no = self.contact_no
+    #             payment_doc.save()
+    #             payment_doc.submit()
 
         
-        # Getting list of check_out with same check in id and is not Hotel Walk In Customer
-        check_out_list = frappe.get_list('Hotel Check Out', filters={
-            'docstatus': 1,
-            'check_in_id': self.check_in_id,
-            'customer': ['not like', 'Hotel Walk In Customer']
-        },
-        order_by = 'name asc')
-        if all_checked_out == 1 and check_out_list:
-            # Creating Sales Invoice
-            sales_invoice_doc = frappe.new_doc('Sales Invoice')
-            company = frappe.get_doc('Company', self.company)
-            sales_invoice_doc.discount_amount = 0
+    #     # Getting list of check_out with same check in id and is not Hotel Walk In Customer
+    #     check_out_list = frappe.get_list('Hotel Check Out', filters={
+    #         'docstatus': 1,
+    #         'check_in_id': self.check_in_id,
+    #         'customer': ['not like', 'Hotel Walk In Customer']
+    #     },
+    #     order_by = 'name asc')
+    #     if all_checked_out == 1 and check_out_list:
+    #         # Creating Sales Invoice
+    #         sales_invoice_doc = frappe.new_doc('Sales Invoice')
+    #         company = frappe.get_doc('Company', self.company)
+    #         sales_invoice_doc.discount_amount = 0
             
-            # Looping through the list
-            for check_out_name in check_out_list:
-                check_out_doc = frappe.get_doc('Hotel Check Out', check_out_name)
-                if sales_invoice_doc.customer == None:
-                    sales_invoice_doc.customer = check_out_doc.customer
-                    sales_invoice_doc.check_in_id = check_out_doc.check_in_id
-                    sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
-                    sales_invoice_doc.due_date = frappe.utils.data.today()
-                    sales_invoice_doc.debit_to = company.default_receivable_account
+    #         # Looping through the list
+    #         for check_out_name in check_out_list:
+    #             check_out_doc = frappe.get_doc('Hotel Check Out', check_out_name)
+    #             if sales_invoice_doc.customer == None:
+    #                 sales_invoice_doc.customer = check_out_doc.customer
+    #                 sales_invoice_doc.check_in_id = check_out_doc.check_in_id
+    #                 sales_invoice_doc.check_in_date = frappe.get_value('Hotel Check In', self.check_in_id, 'check_in')
+    #                 sales_invoice_doc.due_date = frappe.utils.data.today()
+    #                 sales_invoice_doc.debit_to = company.default_receivable_account
                 
-                # Looping through the check out items
-                exclude_discount = 0
-                for item in check_out_doc.items:
-                    if item.is_pos == 0:
-                        item_doc = frappe.get_doc('Item', item.item)
-                        # Getting Item default Income Account
-                        default_income_account = None
-                        for item_default in item_doc.item_defaults:
-                            if item_default.company == check_out_doc.company:
-                                if item_default.income_account:
-                                    default_income_account = item_default.income_account
-                                else:
-                                    default_income_account = company.default_income_account
+    #             # Looping through the check out items
+    #             exclude_discount = 0
+    #             for item in check_out_doc.items:
+    #                 if item.is_pos == 0:
+    #                     item_doc = frappe.get_doc('Item', item.item)
+    #                     # Getting Item default Income Account
+    #                     default_income_account = None
+    #                     for item_default in item_doc.item_defaults:
+    #                         if item_default.company == check_out_doc.company:
+    #                             if item_default.income_account:
+    #                                 default_income_account = item_default.income_account
+    #                             else:
+    #                                 default_income_account = company.default_income_account
 
-                        # Adding Items to Sales Invoice
-                        sales_invoice_doc.append('items',{
-                            'item_code': item_doc.item_code,
-                            'item_name': item_doc.item_name,
-                            'description': item_doc.description,
-                            'qty': item.qty,
-                            'uom': item_doc.stock_uom,
-                            'rate': item.rate,
-                            'amount': item.amount,
-                            'income_account': default_income_account
-                        })
-                    else:
-                        exclude_discount = 1
+    #                     # Adding Items to Sales Invoice
+    #                     sales_invoice_doc.append('items',{
+    #                         'item_code': item_doc.item_code,
+    #                         'item_name': item_doc.item_name,
+    #                         'description': item_doc.description,
+    #                         'qty': item.qty,
+    #                         'uom': item_doc.stock_uom,
+    #                         'rate': item.rate,
+    #                         'amount': item.amount,
+    #                         'income_account': default_income_account
+    #                     })
+    #                 else:
+    #                     exclude_discount = 1
 
-                if check_out_doc.discount != 0 and exclude_discount == 0:
-                    sales_invoice_doc.discount_amount += check_out_doc.discount
-                if self.food_discount != 0 and exclude_discount == 0:
-                    sales_invoice_doc.discount_amount += self.food_discount
-            sales_invoice_doc.save(ignore_permissions=True)
-            sales_invoice_doc.save()
-            frappe.msgprint("Created Invoice # <a href='/desk#Form/Sales Invoice/"+sales_invoice_doc.name +"'>"+ sales_invoice_doc.name+"</a>")
+    #             if check_out_doc.discount != 0 and exclude_discount == 0:
+    #                 sales_invoice_doc.discount_amount += check_out_doc.discount
+    #             if self.food_discount != 0 and exclude_discount == 0:
+    #                 sales_invoice_doc.discount_amount += self.food_discount
+    #         sales_invoice_doc.save(ignore_permissions=True)
+    #         sales_invoice_doc.save()
+    #         frappe.msgprint("Created Invoice # <a href='/desk#Form/Sales Invoice/"+sales_invoice_doc.name +"'>"+ sales_invoice_doc.name+"</a>")
 
 @frappe.whitelist()
 def get_item_name(name):

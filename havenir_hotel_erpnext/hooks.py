@@ -31,7 +31,11 @@ fixtures = [{
         'Hotel Room Reservation-total_extra_beds',
         'Hotel Room Reservation-column_break_14',
         'Hotel Room Reservation-total_capacity',
-        ''
+        'Sales Invoice-check_out_date',
+        'Sales Invoice-reservation_id',
+        'Sales Invoice-guest_id',
+        'Sales Invoice-guest_name',
+        'Sales Invoice-contact_no',
       ]
     ]
   ]
