@@ -19,7 +19,7 @@ def on_submit(self, method):
 			"doctype":"Hotel Check In",
 			"guest_id":guest.name,
 			"check_in":frappe.utils.now(),
-			"company":"Hotel" or None,
+			"company":reservation.company,
 			"posting_date":frappe.utils.now(),
 			"passport_no": guest.passport_no,
 			"cnic":guest.cnic,
@@ -32,7 +32,8 @@ def on_submit(self, method):
 				"price":0,
 				"male":d.male,
 				"female":d.female,
-				"children":d.children,
+				"children":d.children,	
 				"extra_bed_issued":d.extra_beds,
 			}]
 		}).submit()
+		frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Checked In' WHERE parent = %s", (self.select_hotel_room_reservation))	

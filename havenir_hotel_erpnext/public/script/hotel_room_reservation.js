@@ -46,6 +46,7 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
             new_row.room =room_number;
             cur_frm.refresh();
             cur_frm.trigger("recalculate_rates");
+            $('#'+room_number).hide();
             
 
         }
@@ -73,7 +74,7 @@ cur_frm.cscript.show_available_room = function(doc, cdt, cdn){
                     
                     for(var i=0; i<name.length; i++){
                         $('.row_data').append(`
-                                <tr >
+                                <tr id="`+ name[i].room_number +`" >
                                 <th scope="row">`+name[i].room_number+` </th>
                                 <td>`+name[i].room_name+`</td>
                                 <td>`+name[i].capacity+`</td>
@@ -156,8 +157,43 @@ frappe.ui.form.on('Hotel Room Reservation', {
     },
     validate: function(frm){
         cur_frm.trigger("recalculate_rates");
+        var temp_extrabed=0;
+        var total_extrabed=0;
+        var temp_capacity=0;
+        var total_capacity=0
+        for(var i=0; i < cur_frm.doc.selected_room.length; i++){
+            temp_extrabed = cur_frm.doc.selected_room[i].extra_beds
+            total_extrabed = temp_extrabed+ total_extrabed;
+            console.log(total_extrabed)
+            temp_capacity = cur_frm.doc.selected_room[i].capacity
+            total_capacity = temp_capacity+ total_capacity;
+
+           
+        }
+        cur_frm.set_value("total_extra_beds",total_extrabed);
+        cur_frm.set_value("total_capacity",total_capacity);
+        cur_frm.set_value("total_room",cur_frm.doc.selected_room.length);
+        
+    },
+    refresh: function(frm){
+        if(frm.doc.docstatus == 1){
+            $("[data-label='Create%20Invoice']").hide();
+            frm.add_custom_button(__('Create Automation Check In'), ()=> {
+              frappe.model.with_doc("Hotel Settings", "Hotel Settings", ()=>{
+                frappe.model.with_doctype("Checkin Automation", ()=>{
+                  let hotel_settings = frappe.get_doc("Hotel Settings", "Hotel Settings");
+                  let invoice = frappe.model.get_new_doc("Checkin Automation");
+                   invoice.select_hotel_room_reservation = cur_frm.doc.name
+                  frappe.set_route("Form", invoice.doctype, invoice.name);
+                });
+              });
+            });
+          }
+    
     }
-})
+});
+
+
 
 cur_frm.cscript.get_items = function(frm){
     cur_frm.trigger("recalculate_rates");

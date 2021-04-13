@@ -14,29 +14,33 @@
   {
    "fieldname": "guest",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Guest",
    "options": "Hotel Guests"
   },
   {
    "fieldname": "room",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Room",
    "options": "Rooms"
   },
   {
    "fieldname": "date_scheduled",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Date scheduled"
   },
   {
    "fieldname": "status",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Status"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-04-09 13:53:54.104515",
+ "modified": "2021-04-13 09:51:17.810951",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Room Scheduled",
