@@ -146,3 +146,7 @@ def  update_status_cancelled(status, parent):
 @frappe.whitelist()
 def get_item_per_room(parent):
 	return frappe.db.sql("SELECT item FROM `tabRoom Item` where parent =%s",parent, as_dict=1)
+
+@frappe.whitelist()
+def get_payment_list(name):
+	return frappe.db.sql("select name from `tabPayment Entry` where reservation_id=%s", name, as_dict=1)

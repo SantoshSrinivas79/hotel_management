@@ -36,6 +36,10 @@ fixtures = [{
         'Sales Invoice-guest_id',
         'Sales Invoice-guest_name',
         'Sales Invoice-contact_no',
+        'Payment Entry-check_in_id',
+        'Payment Entry-reservation_id',
+        'Payment Entry-advance_payment',
+        'Hotel Room Reservation-advance_payment_list'
       ]
     ]
   ]

@@ -126,6 +126,7 @@ cur_frm.cscript.change_status = function(doc, cdt, cdn){
         }
     });
     me.dialog.show()
+    
 }
 // var date_diff_indays = function(date1, date2) {
 //     var dt1 = new Date(date1);
@@ -189,7 +190,39 @@ frappe.ui.form.on('Hotel Room Reservation', {
               });
             });
           }
-    
+          
+          frm.add_custom_button(__('Create Advance Payment'), ()=> {
+              
+                let doc = frappe.model.get_new_doc('Payment Entry');
+                doc.posting_date =frappe.datetime.nowdate();
+                doc.party_type='Customer';
+                doc.party=cur_frm.doc.customer;
+                doc.mode_of_payment='Cash';
+                doc.party_name=cur_frm.doc.customer;
+                doc.paid_amount=frm.amount;
+                doc.reservation_id=cur_frm.doc.name;
+                doc.advance_payment=1;
+                doc.payment_type='Receive';
+                frappe.set_route('Form', doc.doctype, doc.name)
+        });
+       
+          
+    },
+    onload:function(frm){
+        frappe.call({
+            method:'havenir_hotel_erpnext.public.script.hotel_room_reservation.get_payment_list',
+            args:{name: cur_frm.doc.name},
+            callback: function(r){
+                var data = r.message;
+                console.log(data)
+                cur_frm.clear_table('advance_payment_list')
+                for(var i=0; i< data.length; i++){
+                    var new_row = cur_frm.add_child("advance_payment_list");
+                    new_row.payment_entry =data[i].name;
+                }
+                cur_frm.refresh();
+            }
+        });
     }
 });
 
@@ -220,4 +253,21 @@ cur_frm.cscript.to_date = function(frm){
 
     }
     
+}
+
+cur_frm.cscript.guest_name = function(frm){
+    frappe.call({
+		method: 'frappe.client.get_value',
+		args: {
+			'doctype': 'Hotel Guests',
+			'filters': { 'name': cur_frm.doc.guest_name},
+			'fieldname': [
+				'guest_name'
+			]
+		},
+		callback: function (r) {
+            console.log(r.message);
+            cur_frm.set_value('customer', r.message.guest_name)
+        }
+    });
 }
