@@ -1,0 +1,68 @@
+{
+ "cards": [],
+ "category": "Modules",
+ "charts": [],
+ "creation": "2021-04-15 09:57:03.746412",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Desk Page",
+ "extends_another_page": 0,
+ "hide_custom": 0,
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Hotel Management",
+ "modified": "2021-04-15 09:57:40.198457",
+ "modified_by": "Administrator",
+ "module": "Havenir Hotel Erpnext",
+ "name": "Hotel Management",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 1,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Room Reservation",
+   "link_to": "Hotel Room Reservation",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Automation of Check In",
+   "link_to": "Checkin Automation",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Check In",
+   "link_to": "Hotel Check In",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Check Out",
+   "link_to": "Hotel Check Out",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Food Order",
+   "link_to": "Hotel Food Order",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Laundry Order",
+   "link_to": "Hotel Laundry Order",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Room Pricing",
+   "link_to": "Hotel Room Pricing",
+   "type": "DocType"
+  }
+ ],
+ "shortcuts_label": "Hotel Short Cut"
+}
