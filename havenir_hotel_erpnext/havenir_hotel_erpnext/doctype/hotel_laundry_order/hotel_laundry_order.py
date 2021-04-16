@@ -22,6 +22,18 @@ class HotelLaundryOrder(Document):
     doc = frappe.get_doc('Hotel Laundry Order', self.name)
     doc.db_set('status','Cancelled')
 
+  def get_price(self, item):
+    item_price = frappe.get_value('Item Price', 
+    {
+        'price_list': 'Standard Selling',
+        'item_code': item,
+        'selling': 1 
+    },
+    [
+        'price_list_rate'
+    ])
+    return item_price
+
 def set_status(self):
   if self.order_type == 'Room':
       self.status = 'To Check Out'

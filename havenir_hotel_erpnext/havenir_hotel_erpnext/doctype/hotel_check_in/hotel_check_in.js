@@ -23,6 +23,24 @@ frappe.ui.form.on("Hotel Check In", {
     var image_html = '<img src="' + frm.doc.guest_photo_attachment + '">';
     $(frm.fields_dict['guest_photo'].wrapper).html(image_html);
     frm.refresh_field('guest_photo');
+
+    if(cur_frm.doc.docstatus ==1 ){
+            frm.add_custom_button(__('Create Advance Payment'), ()=> {
+                      
+              let doc = frappe.model.get_new_doc('Payment Entry');
+              doc.posting_date =frappe.datetime.nowdate();
+              doc.party_type='Customer';
+              doc.party=cur_frm.doc.customer;
+              doc.mode_of_payment='Cash';
+              doc.party_name=cur_frm.doc.guest_name;
+              doc.paid_amount=frm.amount;
+              doc.reservation_id=cur_frm.doc.reservation_id;
+              doc.advance_payment=1;
+              doc.payment_type='Receive';
+              doc.company = cur_frm.doc.company;
+              frappe.set_route('Form', doc.doctype, doc.name)
+      });
+    }
   },
 
   validate: function(frm){

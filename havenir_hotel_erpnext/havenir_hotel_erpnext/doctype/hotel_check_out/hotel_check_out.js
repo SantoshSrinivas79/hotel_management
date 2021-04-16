@@ -145,10 +145,12 @@ frappe.ui.form.on("Hotel Check Out", {
           frm.doc.check_in_id = data[0];
           frm.doc.cnic = data[1];
           frm.doc.guest_name = data[2];
+          frm.doc.customer = data[2];
           frm.doc.check_in = data[3];
           frm.doc.contact_no = data[4];
           frm.doc.guest_id = data[5];
           frm.doc.reservation_id = data[6];
+          frm.refresh_field("customer");
           frm.refresh_field("check_in_id");
           frm.refresh_field("cnic");
           frm.refresh_field("guest_name");

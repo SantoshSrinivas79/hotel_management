@@ -53,3 +53,55 @@ frappe.ui.form.on('Hotel Laundry Order Item', {
 		frm.trigger('total_amount');
 	},
 })
+
+frappe.ui.form.on("Hotel Laundry Order Item", {
+	item: function(frm, cdt, cdn) {
+	  let row = frappe.get_doc(cdt, cdn);
+	  if (row.item) {
+		frm.call("get_price", { item: row.item }).then(r => {
+		  if (r.message) {
+					  frappe.model.set_value(cdt, cdn, 'rate', r.message);
+				  }
+		})
+	  }
+	},
+  
+	qty: function(frm, cdt, cdn) {
+			  let row = frappe.get_doc(cdt, cdn);
+			  if (row.qty < 0){
+				  row.qty = 0;
+				  frm.refresh_field('items')
+				  frappe.throw('Qty cannot be negative!')
+			  }
+			  if (row.rate && row.qty) {
+				  row.amount = row.qty * row.rate;
+				  frm.refresh_field("items");
+				  frm.trigger("total_amount");
+			  }
+	},
+	rate: function(frm, cdt, cdn) {
+	  let row = frappe.get_doc(cdt, cdn);
+	  if (row.qty != undefined && row.item != undefined) {
+		if (row.item == 'BREAKFAST COMPLIMENTARY' || row.item == 'LUNCH COMPLIMENTARY' || row.item == 'DINNER COMPLIMENTARY'){
+		  row.amount = row.qty * row.rate;
+		  frm.refresh_field("items");
+		  frm.trigger("total_amount");
+		}
+		else {
+		  frm.call("get_price", { item: row.item }).then(r => {
+			if (r.message) {
+			  frappe.model.set_value(cdt, cdn, 'rate', r.message);
+			  row.amount = row.qty * row.rate;
+			  frm.refresh_field("items");
+			  frm.trigger("total_amount");
+			}
+		  })
+		}
+	  }
+	},
+  
+	items_remove: function(frm, cdt, cdn) {
+	  frm.trigger("total_amount");
+	}
+  });
+  

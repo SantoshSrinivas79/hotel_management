@@ -16,6 +16,10 @@ frappe.ui.form.on("Hotel Guests", {
       cur_frm.set_value("cnic",cnic+"X");
     }else if(frm.doc.cnic && frm.doc.cnic.length > 12){
       frappe.throw("CNIC fields limited to 12 max number")
+    }else if(frm.doc.cnic && frm.doc.cnic.length< 9){
+      frappe.throw("CNIC fields should not less than 9")
+    }else if(frm.doc.cnic && frm.doc.cnic.length== 10 || frm.doc.cnic.length== 11){
+      frappe.throw("CNIC fields should be equal to 9 or 12 characters")
     }
     // if (frm.doc.contact_no && frm.doc.contact_no.length != 12) {
     //   frm.doc.contact_no = undefined;

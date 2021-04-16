@@ -158,10 +158,10 @@ frappe.ui.form.on('Hotel Room Reservation', {
     },
     validate: function(frm){
         cur_frm.trigger("recalculate_rates");
-        var temp_extrabed=0;
-        var total_extrabed=0;
-        var temp_capacity=0;
-        var total_capacity=0
+        var temp_extrabed;
+        var total_extrabed;
+        var temp_capacity;
+        var total_capacity;
         for(var i=0; i < cur_frm.doc.selected_room.length; i++){
             temp_extrabed = cur_frm.doc.selected_room[i].extra_beds
             total_extrabed = temp_extrabed+ total_extrabed;
@@ -189,22 +189,25 @@ frappe.ui.form.on('Hotel Room Reservation', {
                 });
               });
             });
+
+            frm.add_custom_button(__('Create Advance Payment'), ()=> {
+                
+                    let doc = frappe.model.get_new_doc('Payment Entry');
+                    doc.posting_date =frappe.datetime.nowdate();
+                    doc.party_type='Customer';
+                    doc.party=cur_frm.doc.customer;
+                    doc.mode_of_payment='Cash';
+                    doc.party_name=cur_frm.doc.customer;
+                    doc.paid_amount=frm.amount;
+                    doc.reservation_id=cur_frm.doc.name;
+                    doc.advance_payment=1;
+                    doc.payment_type='Receive';
+                    doc.company = cur_frm.doc.company;
+                    frappe.set_route('Form', doc.doctype, doc.name)
+            });
           }
           
-          frm.add_custom_button(__('Create Advance Payment'), ()=> {
-              
-                let doc = frappe.model.get_new_doc('Payment Entry');
-                doc.posting_date =frappe.datetime.nowdate();
-                doc.party_type='Customer';
-                doc.party=cur_frm.doc.customer;
-                doc.mode_of_payment='Cash';
-                doc.party_name=cur_frm.doc.customer;
-                doc.paid_amount=frm.amount;
-                doc.reservation_id=cur_frm.doc.name;
-                doc.advance_payment=1;
-                doc.payment_type='Receive';
-                frappe.set_route('Form', doc.doctype, doc.name)
-        });
+       
        
           
     },
