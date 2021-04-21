@@ -13,10 +13,25 @@ class HotelFoodOrder(Document):
             room_doc = frappe.get_doc('Rooms', self.room)
             if room_doc.room_status != 'Checked In' and room_doc.check_in_id == self.check_in_id:
                 frappe.throw('Room Status is not Checked In')
-
+                
     def on_submit(self):
         create_invoice(self)
         set_status(self)
+        stock_entry = frappe.new_doc('Stock Entry')
+        stock_entry.from_warehouse = frappe.db.get_single_value('Stock Settings','default_warehouse')
+        item_stock_entry = []
+        if self.room and self.order_type == 'Room':
+            stock_entry.stock_entry_type = "Manufacture"
+            for i in self.items:
+                if i.link_stock_entry == 1:
+                    item_stock_entry.append(i.item)
+                    stock_entry.append('items',{
+                        'item_code':i.item,
+                        'qty':i.qty,
+                        'basic_rate':i.rate
+                    }) 
+            if item_stock_entry != []:
+                stock_entry.save()
 
     def on_cancel(self):
         self.status = "Cancelled"

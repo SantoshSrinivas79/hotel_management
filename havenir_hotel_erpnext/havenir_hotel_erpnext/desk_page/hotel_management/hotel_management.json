@@ -13,7 +13,7 @@
  "is_default": 0,
  "is_standard": 1,
  "label": "Hotel Management",
- "modified": "2021-04-15 09:57:40.198457",
+ "modified": "2021-04-21 09:20:48.681438",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Management",
@@ -61,6 +61,18 @@
    "doc_view": "",
    "label": "Room Pricing",
    "link_to": "Hotel Room Pricing",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Rooms",
+   "link_to": "Rooms",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Room Maintenance",
+   "link_to": "Room Maintenance",
    "type": "DocType"
   }
  ],

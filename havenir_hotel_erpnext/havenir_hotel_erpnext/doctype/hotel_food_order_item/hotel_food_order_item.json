@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2020-01-29 16:29:44.986154",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,7 +9,8 @@
   "qty",
   "rate",
   "amount",
-  "details"
+  "details",
+  "link_stock_entry"
  ],
  "fields": [
   {
@@ -49,10 +51,18 @@
    "fieldname": "details",
    "fieldtype": "Small Text",
    "label": "Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "link_stock_entry",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Link Stock Entry"
   }
  ],
  "istable": 1,
- "modified": "2020-02-17 10:54:02.882011",
+ "links": [],
+ "modified": "2021-04-20 17:38:37.464378",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Food Order Item",

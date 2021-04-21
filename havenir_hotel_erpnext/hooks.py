@@ -39,7 +39,9 @@ fixtures = [{
         'Payment Entry-check_in_id',
         'Payment Entry-reservation_id',
         'Payment Entry-advance_payment',
-        'Hotel Room Reservation-advance_payment_list'
+        'Hotel Room Reservation-advance_payment_list',
+        'Warehouse-column_break_2',
+        'Warehouse-rooms'
       ]
     ]
   ]

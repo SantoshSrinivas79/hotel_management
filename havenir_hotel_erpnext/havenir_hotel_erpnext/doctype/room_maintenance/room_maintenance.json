@@ -1,61 +1,65 @@
 {
  "actions": [],
- "creation": "2021-04-09 13:51:23.163212",
+ "autoname": "RM.#####",
+ "creation": "2021-04-21 09:19:03.464079",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "guest",
-  "employee",
   "room",
-  "date_scheduled",
-  "status"
+  "employee",
+  "start_date",
+  "end_date",
+  "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "guest",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Guest",
-   "options": "Hotel Guests",
-   "read_only": 1
-  },
   {
    "fieldname": "room",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Room",
    "options": "Rooms",
-   "read_only": 1
-  },
-  {
-   "fieldname": "date_scheduled",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "Date scheduled",
-   "read_only": 1
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Status",
-   "read_only": 1
+   "reqd": 1
   },
   {
    "fieldname": "employee",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Employee",
    "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Room Maintenance",
+   "print_hide": 1,
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2021-04-21 09:26:41.511296",
+ "modified": "2021-04-21 10:05:36.589819",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
- "name": "Room Scheduled",
+ "name": "Room Maintenance",
  "owner": "Administrator",
  "permissions": [
   {
@@ -71,7 +75,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1
