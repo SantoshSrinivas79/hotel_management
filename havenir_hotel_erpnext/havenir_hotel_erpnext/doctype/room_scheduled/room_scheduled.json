@@ -9,7 +9,8 @@
   "employee",
   "room",
   "date_scheduled",
-  "status"
+  "status",
+  "color"
  ],
  "fields": [
   {
@@ -48,11 +49,16 @@
    "label": "Employee",
    "options": "Employee",
    "read_only": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-04-21 09:26:41.511296",
+ "modified": "2021-04-21 17:02:20.654821",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Room Scheduled",

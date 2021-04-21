@@ -20,7 +20,7 @@ class HotelCheckOut(Document):
         room_doc.db_set('check_in_id',None)
         check_in_doc = frappe.get_doc('Hotel Check In',self.check_in_id)
         all_checked_out = 1
-        frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Checked Out' WHERE parent = %s and room=%s", (self.reservation_id, self.room))
+        frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Checked Out', color='#428b46' WHERE parent = %s and room=%s", (self.reservation_id, self.room))
 
         # Setting Food Orders to Complete
         room_food_order_list = frappe.get_list('Hotel Food Order', filters={

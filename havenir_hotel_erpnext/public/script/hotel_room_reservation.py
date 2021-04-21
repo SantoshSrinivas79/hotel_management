@@ -132,7 +132,8 @@ def on_submit(self, method):
 				"room":d.room,
 				"date_scheduled":day,
 				"status":self.status,
-				"parent":self.name
+				"parent":self.name,
+				"color":"#ffb1b1"
 			}).save()
 
 @frappe.whitelist()

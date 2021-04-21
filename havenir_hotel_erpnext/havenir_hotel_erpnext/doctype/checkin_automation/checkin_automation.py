@@ -15,7 +15,7 @@ def on_submit(self, method):
 	reservation = frappe.get_doc("Hotel Room Reservation", self.select_hotel_room_reservation)
 	guest = frappe.get_doc("Hotel Guests", reservation.guest_name)
 	for d in reservation.selected_room:
-		frappe.get_doc({
+		doc = frappe.get_doc({
 			"doctype":"Hotel Check In",
 			"guest_id":guest.name,
 			"check_in":frappe.utils.now(),
@@ -36,4 +36,5 @@ def on_submit(self, method):
 				"extra_bed_issued":d.extra_beds,
 			}]
 		}).submit()
-		frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Checked In' WHERE parent = %s", (self.select_hotel_room_reservation))	
+		frappe.msgprint("Created Check In")
+		frappe.db.sql("UPDATE `tabRoom Scheduled` set status ='Checked In', color='#a83333' WHERE parent = %s", (self.select_hotel_room_reservation))	
