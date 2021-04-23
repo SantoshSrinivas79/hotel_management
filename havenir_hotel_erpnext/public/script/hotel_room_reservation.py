@@ -154,3 +154,12 @@ def get_item_per_room(parent):
 @frappe.whitelist()
 def get_payment_list(name):
 	return frappe.db.sql("select name from `tabPayment Entry` where reservation_id=%s", name, as_dict=1)
+
+@frappe.whitelist()
+def hotel_settings():
+	data=[]
+	checkin= frappe.db.get_single_value('Hotel Management Settings','check_in')
+	data.append(checkin)
+	checkout= frappe.db.get_single_value('Hotel Management Settings','check_out')
+	data.append(checkout)
+	return data

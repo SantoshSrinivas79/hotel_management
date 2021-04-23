@@ -208,8 +208,19 @@ frappe.ui.form.on('Hotel Room Reservation', {
             });
           }
           
-       
-       
+          var current = frappe.datetime.get_today();
+          
+          frappe.call({
+            method: "havenir_hotel_erpnext.public.script.hotel_room_reservation.hotel_settings",
+            args: {},
+            callback: function(r) {
+                  var data = r.message;
+                  console.log(data);
+                  cur_frm.set_value("from_date",current+" "+ data[0])
+                  cur_frm.set_value("to_date",frappe.datetime.add_days(current, 1)+" "+ data[1])
+            
+                }
+            });
           
     },
     onload:function(frm){

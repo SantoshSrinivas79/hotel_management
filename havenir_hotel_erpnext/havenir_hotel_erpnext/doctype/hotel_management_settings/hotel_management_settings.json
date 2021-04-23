@@ -9,11 +9,13 @@
   "restaurant_party",
   "banquet_hall_party",
   "take_away",
+  "check_in",
   "column_break_6",
   "hotel_walk_in_customer",
   "restaurant_walk_in_customer",
   "room_complimentary",
-  "staff_entertainment"
+  "staff_entertainment",
+  "check_out"
  ],
  "fields": [
   {
@@ -72,10 +74,20 @@
    "fieldtype": "Link",
    "label": "Staff Entertainment",
    "options": "Customer"
+  },
+  {
+   "fieldname": "check_in",
+   "fieldtype": "Time",
+   "label": "Check In"
+  },
+  {
+   "fieldname": "check_out",
+   "fieldtype": "Time",
+   "label": "Check Out"
   }
  ],
  "issingle": 1,
- "modified": "2020-02-10 23:52:57.069521",
+ "modified": "2021-04-23 17:01:58.943823",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Management Settings",
