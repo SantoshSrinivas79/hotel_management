@@ -27,12 +27,15 @@ class HotelCheckIn(Document):
 
     def on_cancel(self):
         self.status = "Cancelled"
+        room_no = self.rooms[0].room_no
         doc = frappe.get_doc('Hotel Check In', self.name)
         doc.db_set('status', 'Cancelled')
+        frappe.db.sql("UPDATE `tabRoom Scheduled` set color='#428b46', status='Canceled' where room=%s and status='Checked In' ",room_no)
         for room in self.rooms:
             room_doc = frappe.get_doc('Rooms', room.room_no)
             room_doc.db_set('check_in_id', None)
             room_doc.db_set('room_status', 'Available')
+        
 
     def get_room_price(self, room):
         room_price = frappe.get_value('Rooms', {

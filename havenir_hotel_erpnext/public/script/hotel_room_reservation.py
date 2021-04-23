@@ -12,6 +12,9 @@ class HotelRoomUnavailableError(frappe.ValidationError): pass
 class HotelRoomPricingNotSetError(frappe.ValidationError): pass
 
 class HotelRoomReservation(Document):
+	def on_cancel(self):
+		frappe.db.sql("DELETE from `tabRoom Scheduled` where parent=%s", self.name)
+
 	def validate(self):
 		self.total_rooms = {}
 		self.set_rates()

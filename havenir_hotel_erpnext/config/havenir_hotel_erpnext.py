@@ -30,6 +30,27 @@ def get_data():
                     "description": _("Create new Room Facility Type"),
                     "onboard": 1,
                 },
+                {
+                    "type": "doctype",
+                    "name": "Hotel Room Reservation",
+                    "label": _("Hotel Room Reservation"),
+                    "description": _("Create new Hotel Room Reservation"),
+                    "onboard": 1,
+                },
+                {
+                    "type": "doctype",
+                    "name": "Room Maintenance",
+                    "label": _("Room Maintenance"),
+                    "description": _("Create new Room Maintenance"),
+                    "onboard": 1,
+                },
+                {
+                    "type": "doctype",
+                    "name": "Hotel Room Pricing",
+                    "label": _("Hotel Room Pricing"),
+                    "description": _("Create new Hotel Room Pricing"),
+                    "onboard": 1,
+                },
             ]
         },
         {
@@ -64,6 +85,13 @@ def get_data():
                     "name": "Hotel Payment Entry",
                     "label": _("Hotel Payment Entry"),
                     "description": _("Create new Hotel Payment Entry"),
+                    "onboard": 1,
+                },
+                {
+                    "type": "doctype",
+                    "name": "Checkin Automation",
+                    "label": _("Check In Automation"),
+                    "description": _("Create new Check In Automation"),
                     "onboard": 1,
                 },
             ]
@@ -108,5 +136,6 @@ def get_data():
                     "onboard": 1,
                 }
             ]
-        }
+        },
+        
     ]

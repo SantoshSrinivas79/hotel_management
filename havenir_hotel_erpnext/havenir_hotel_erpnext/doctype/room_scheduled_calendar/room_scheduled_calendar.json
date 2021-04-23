@@ -1,0 +1,66 @@
+{
+ "autoname": "Prompt",
+ "creation": "2021-04-23 12:30:36.633163",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "reference_doctype",
+  "subject_field",
+  "start_date_field",
+  "end_date_field"
+ ],
+ "fields": [
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Reference Document Type",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "subject_field",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Subject Field",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_date_field",
+   "fieldtype": "Select",
+   "label": "Start Date Field",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date_field",
+   "fieldtype": "Select",
+   "label": "End Date Field",
+   "reqd": 1
+  }
+ ],
+ "issingle": 1,
+ "modified": "2021-04-23 12:34:21.097441",
+ "modified_by": "Administrator",
+ "module": "Havenir Hotel Erpnext",
+ "name": "Room Scheduled Calendar",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "All"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

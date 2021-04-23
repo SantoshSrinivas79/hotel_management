@@ -158,16 +158,17 @@ frappe.ui.form.on('Hotel Room Reservation', {
     },
     validate: function(frm){
         cur_frm.trigger("recalculate_rates");
-        var temp_extrabed;
-        var total_extrabed;
-        var temp_capacity;
-        var total_capacity;
+        var temp_extrabed=0;
+        var total_extrabed=0;
+        var temp_capacity=0;
+        var total_capacity=0;
         for(var i=0; i < cur_frm.doc.selected_room.length; i++){
             temp_extrabed = cur_frm.doc.selected_room[i].extra_beds
-            total_extrabed = temp_extrabed+ total_extrabed;
+            total_extrabed = temp_extrabed+ total_extrabed  ;
             console.log(total_extrabed)
             temp_capacity = cur_frm.doc.selected_room[i].capacity
             total_capacity = temp_capacity+ total_capacity;
+            console.log(total_capacity)
 
            
         }

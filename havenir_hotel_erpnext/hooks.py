@@ -57,7 +57,7 @@ fixtures = [{
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/havenir_hotel_erpnext/css/havenir_hotel_erpnext.css"
-# app_include_js = "/assets/havenir_hotel_erpnext/js/havenir_hotel_erpnext.js"
+app_include_js = "/assets/havenir_hotel_erpnext/js/multi.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/havenir_hotel_erpnext/css/havenir_hotel_erpnext.css"
