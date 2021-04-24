@@ -17,21 +17,19 @@ class HotelFoodOrder(Document):
     def on_submit(self):
         create_invoice(self)
         set_status(self)
-        stock_entry = frappe.new_doc('Stock Entry')
-        stock_entry.from_warehouse = frappe.db.get_single_value('Stock Settings','default_warehouse')
-        item_stock_entry = []
         if self.room and self.order_type == 'Room':
-            stock_entry.stock_entry_type = "Manufacture"
             for i in self.items:
                 if i.link_stock_entry == 1:
-                    item_stock_entry.append(i.item)
+                    stock_entry = frappe.new_doc('Stock Entry')
+                    stock_entry.stock_entry_type = "Manufacture"
+                    stock_entry.from_warehouse = frappe.db.get_single_value('Stock Settings','default_warehouse')
+                    stock_entry.from_bom = 1
                     stock_entry.append('items',{
                         'item_code':i.item,
                         'qty':i.qty,
                         'basic_rate':i.rate
                     }) 
-            if item_stock_entry != []:
-                stock_entry.save()
+                    stock_entry.save()
 
     def on_cancel(self):
         self.status = "Cancelled"
@@ -49,7 +47,7 @@ class HotelFoodOrder(Document):
             'price_list_rate'
         ])
         return item_price
-
+    
 def create_invoice(self):
     company = frappe.get_doc('Company', self.company)
     if self.order_type == 'Room' and self.is_complimentary == 1:
@@ -214,3 +212,7 @@ def create_payment_voucher(self, customer, company, remarks):
     payment_entry.remarks = remarks
     payment_entry.insert(ignore_permissions=True)
     payment_entry.submit()
+
+@frappe.whitelist()
+def get_reservation_item(parent, room):
+    return frappe.db.sql("SELECT * FROM `tabHotel Room Reservation Item` where parent =%s and room =%s",(parent, room), as_dict=1)

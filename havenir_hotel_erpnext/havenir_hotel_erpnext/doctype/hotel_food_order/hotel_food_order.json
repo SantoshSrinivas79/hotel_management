@@ -19,6 +19,7 @@
   "posting_date",
   "date",
   "check_in_id",
+  "package_item",
   "guest_name",
   "section_break_8",
   "items",
@@ -257,10 +258,17 @@
    "fieldtype": "Datetime",
    "label": "Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "package_item",
+   "fieldtype": "Link",
+   "label": "Package Item",
+   "options": "Item",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-03-11 18:23:37.190052",
+ "modified": "2021-04-24 10:10:47.755076",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Hotel Food Order",

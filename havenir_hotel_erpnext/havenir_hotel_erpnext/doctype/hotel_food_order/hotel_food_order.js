@@ -103,6 +103,30 @@ frappe.ui.form.on("Hotel Food Order", {
     }
   },
 
+  room: function(frm){
+    console.log(frm.doc.check_in_id)
+    frappe.call({
+      method: 'frappe.client.get_value',
+      args: {
+          'doctype': 'Hotel Check In',
+          'filters': { 'name': frm.doc.check_in_id},
+          'fieldname': ['reservation_id' ]
+      }
+    }).done(function(r){
+      console.log(r.message.reservation_id)
+       frappe.call({
+          method: 'havenir_hotel_erpnext.havenir_hotel_erpnext.doctype.hotel_food_order.hotel_food_order.get_reservation_item',
+          args:{parent:r.message.reservation_id, room:frm.doc.room},
+          callback: function(r) {
+            cur_frm.set_value("package_item",r.message[0].item);
+            frm.refresh_field("package_item");
+          }
+        });
+    });
+        
+       
+  },
+  
   discount_amount: function(frm) {
     frm.doc.discount_percentage =
       (frm.doc.discount_amount / frm.doc.total_amount) * 100;
