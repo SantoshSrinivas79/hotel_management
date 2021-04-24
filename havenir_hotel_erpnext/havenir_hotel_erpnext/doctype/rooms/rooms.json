@@ -1,5 +1,4 @@
 {
- "actions": [],
  "autoname": "field:room_number",
  "creation": "2020-01-29 12:55:46.208299",
  "doctype": "DocType",
@@ -105,8 +104,7 @@
   }
  ],
  "icon": "calender",
- "links": [],
- "modified": "2021-04-09 22:37:22.568037",
+ "modified": "2021-04-24 16:05:46.297992",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "Rooms",
