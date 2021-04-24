@@ -9,7 +9,7 @@
  "amount": 0.0,
  "amount_based_on_field": 0,
  "button_label": "Send Booking",
- "client_script": "frappe.web_form.validate = () => {\n    console.log(\"test\")\n}\n",
+ "client_script": "frappe.web_form.validate = () => {\n    let data = frappe.web_form.get_values();\n    frappe.web_form.doc['parameters'] = data.parameters;//set this here otherwise the child table values will not save\n    return true; //Make sure you return true else data will not save\n}\n",
  "creation": "2021-04-24 15:07:39.222005",
  "currency": "PHP",
  "doc_type": "Hotel Room Reservation",
@@ -19,7 +19,7 @@
  "is_standard": 1,
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2021-04-24 15:22:44.837689",
+ "modified": "2021-04-24 16:41:24.288513",
  "modified_by": "Administrator",
  "module": "Havenir Hotel Erpnext",
  "name": "room-reservation",
@@ -32,7 +32,7 @@
  "show_in_grid": 0,
  "show_sidebar": 0,
  "sidebar_items": [],
- "success_message": "Youre book has been served",
+ "success_message": "Booking Sent!",
  "success_url": "/room-reservation",
  "title": "Room Reservation",
  "web_form_fields": [
@@ -46,7 +46,7 @@
    "max_value": 0,
    "options": "Hotel Guests",
    "read_only": 0,
-   "reqd": 1,
+   "reqd": 0,
    "show_in_filter": 0
   },
   {
@@ -64,13 +64,11 @@
   },
   {
    "allow_read_on_all_link_options": 0,
-   "fieldname": "company",
-   "fieldtype": "Link",
+   "fieldname": "",
+   "fieldtype": "Column Break",
    "hidden": 0,
-   "label": "Company",
    "max_length": 0,
    "max_value": 0,
-   "options": "Company",
    "read_only": 0,
    "reqd": 0,
    "show_in_filter": 0
@@ -84,7 +82,7 @@
    "max_length": 0,
    "max_value": 0,
    "read_only": 0,
-   "reqd": 1,
+   "reqd": 0,
    "show_in_filter": 0
   },
   {
@@ -93,19 +91,6 @@
    "fieldtype": "Datetime",
    "hidden": 0,
    "label": "To Date",
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 0,
-   "reqd": 1,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "default": "0",
-   "fieldname": "late_checkin",
-   "fieldtype": "Check",
-   "hidden": 0,
-   "label": "Late Checkin",
    "max_length": 0,
    "max_value": 0,
    "read_only": 0,
@@ -121,19 +106,6 @@
    "max_value": 0,
    "read_only": 0,
    "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "hidden": 0,
-   "label": "Status",
-   "max_length": 0,
-   "max_value": 0,
-   "options": "Booked\nAdvance Paid\nInvoiced\nPaid\nCompleted\nCancelled",
-   "read_only": 0,
-   "reqd": 1,
    "show_in_filter": 0
   },
   {
@@ -171,102 +143,6 @@
    "options": "Hotel Room Reservation Item",
    "read_only": 0,
    "reqd": 1,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "advance_payment_list",
-   "fieldtype": "Table",
-   "hidden": 0,
-   "label": "Advance Payment List",
-   "max_length": 0,
-   "max_value": 0,
-   "options": "Advance Payment Entry",
-   "read_only": 0,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "net_total",
-   "fieldtype": "Currency",
-   "hidden": 0,
-   "label": "Net Total",
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 0,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "hidden": 0,
-   "label": "Amended From",
-   "max_length": 0,
-   "max_value": 0,
-   "options": "Hotel Room Reservation",
-   "read_only": 1,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "section_break_16",
-   "fieldtype": "Section Break",
-   "hidden": 0,
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 0,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "total_extra_beds",
-   "fieldtype": "Int",
-   "hidden": 0,
-   "label": "Total Extra Beds",
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 1,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "column_break_14",
-   "fieldtype": "Column Break",
-   "hidden": 0,
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 0,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "total_capacity",
-   "fieldtype": "Int",
-   "hidden": 0,
-   "label": "Total Capacity",
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 1,
-   "reqd": 0,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 0,
-   "fieldname": "total_room",
-   "fieldtype": "Int",
-   "hidden": 0,
-   "label": "Total Room",
-   "max_length": 0,
-   "max_value": 0,
-   "read_only": 1,
-   "reqd": 0,
    "show_in_filter": 0
   }
  ]
